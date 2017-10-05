@@ -26,9 +26,14 @@ def calc_features(data_vm, data_x, data_y, data_z, freq_rate):
     end_time = timeit.default_timer() #time.clock()
     run_time = end_time - start_time
 
-    instance = [pre_mean, pre_variance, pre_max_val, pre_min_val, pre_rms, pre_velo, pre_sma, pre_ema, pre_energy,
-    imp_mean, imp_variance, imp_max_val, imp_min_val, imp_rms, imp_velo, imp_sma, imp_ema, imp_energy,
-    post_mean, post_variance, post_max_val, post_min_val, post_rms, post_velo, post_sma, post_ema, post_energy]
+    #instance = [pre_mean, pre_variance, pre_max_val, pre_min_val, pre_rms, pre_velo, pre_sma, pre_ema, pre_energy,
+    #imp_mean, imp_variance, imp_max_val, imp_min_val, imp_rms, imp_velo, imp_sma, imp_ema, imp_energy,
+    #post_mean, post_variance, post_max_val, post_min_val, post_rms, post_velo, post_sma, post_ema, post_energy]
+
+    instance = [pre_mean, pre_sma, pre_velo, pre_ema,
+    imp_mean, imp_min_val, imp_rms, imp_velo, imp_sma, imp_ema,
+    post_min_val, post_ema]
+
 
     return instance, run_time
 

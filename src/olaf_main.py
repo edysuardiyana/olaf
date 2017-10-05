@@ -6,14 +6,13 @@ import random
 import matplotlib.pyplot as plt
 import numpy as np
 import timeit
+import normalization_feat as nf
 
 def olaf_main(exp, cl):
-    #pool_P = [] #comment for reset
-    #pool_N = [] #comment for reset
-
-    #pool_ann_P = [] #comment for reset
-    #pool_ann_N = [] #comment for reset
-
+    pool_P = [] #comment for reset
+    pool_ann_P = [] #comment for reset
+    pool_N = [] #comment for reset
+    pool_ann_N = [] #comment for reset
     runtime_pool = []
 
     num_of_false = []
@@ -27,23 +26,23 @@ def olaf_main(exp, cl):
 
     #train initial classifier
     if cl == 0:
-        clf= LogisticRegression(C = 1.0)#
+        clf= LogisticRegression(C = 1e9)#
         classifier = clf.fit(training_set, training_annot)
     elif cl == 1:
         clf = SGDClassifier(loss="log",penalty='l2')
         classifier = clf.fit(training_set, training_annot)
     else:
         clf = SGDClassifier(loss="log",penalty='l2', learning_rate = 'constant',eta0 = 0.001)
-        print clf
+        #print clf
         classifier = clf.partial_fit(training_set, training_annot, classes=np.unique(training_annot))
 
     #start the iteration of SGD
     F_score_temp = []
     for i in range(nob):
-        pool_P = [] #comment for non-reset
-        pool_ann_P = [] #comment for non-reset
-        pool_N = [] #comment for non-reset
-        pool_ann_N = [] #comment for non-reset
+        #pool_P = [] #comment for non-reset
+        #pool_ann_P = [] #comment for non-reset
+        #pool_N = [] #comment for non-reset
+        #pool_ann_N = [] #comment for non-reset
         update_batch = []
         update_annot = []
 
@@ -75,7 +74,7 @@ def olaf_main(exp, cl):
             #print "getting here"
             updated_data,updated_annot = shuffling_batch(pool_P,pool_ann_P, pool_N, pool_ann_N)
             num_of_false.append([len(updated_data),0])
-
+            #print updated_data
             if updated_data:
                 start_time = timeit.default_timer()# time.clock()
                 classifier.partial_fit(updated_data,updated_annot)
@@ -146,8 +145,11 @@ def read_data(name):
             temp_data = [float(i) for i in raw[:len(raw)]]
             data.append(temp_data[:len(temp_data)-1])
             annot.append(temp_data[len(temp_data)-1])
-
-    return data,annot
+    #print data
+    #print "#################################"
+    new_data = nf.norm_feat(data)
+    #print new_data
+    return new_data,annot #data, annot #
 
 def metrics_calc(annot,predict):
     index_P = []
@@ -162,13 +164,13 @@ def metrics_calc(annot,predict):
         result = accuracy_check(predict[i],annot[i])
         if result == 1:
             TP = TP+1
-            index_P.append(i)
+            #index_P.append(i)
         elif result == 2:
             FP = FP + 1
             index_N.append(i)
         elif result == 3:
             TN = TN + 1
-            index_N.append(i)
+            #index_N.append(i)
         else:
             FN = FN + 1
             index_P.append(i)

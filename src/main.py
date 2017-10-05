@@ -20,7 +20,7 @@ def main():
 
     #extract features
     #print extract features from subjects
-    #extract_features(listname,freq_rate)
+    extract_features(listname,freq_rate)
 
     #loop for each type of classifier: 0. Logreg, 1. SGD without update, 2. SGD with update
     tot_plot = [] # to collect data for plotting
@@ -64,7 +64,7 @@ def main():
 def write_plot(data):
     fin_array = []
     path = src.plotting("result")
-    header = ["Logistic Regression","SGD", "Updated-SGD"]
+    header = ["Logistic_Regression","SGD", "Updated-SGD"]
     fin_array.append(header)
 
     for i in range(len(data[0])):
